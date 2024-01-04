@@ -12,10 +12,9 @@ const AudioComponent = () => {
     try {
       const querySnapshot = await getDocs(audio_files);
       const data = querySnapshot.docs.map(doc => doc.data());
-
-      // Ensure 'data' is always an array
       const newData = data.length > 0 ? data : [];
 
+      console.log(newData);
       setFiles(newData);
     } catch (error) {
       console.error("Error getting documents:", error);
@@ -34,7 +33,7 @@ const AudioComponent = () => {
         files.map((doc, index) => (
           <View key={index}>
             <Text>Date Time: {doc.date_time.toDate().toLocaleString()}</Text>
-            <Text>Recordings:</Text>
+            <Text>Recordings:{doc.recordings}</Text>
           </View>
         ))
       ) : (
