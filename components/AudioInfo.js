@@ -7,7 +7,7 @@ const AudioInfo = ({ counter, time }) => {
 
         <Text style={styles.fill}>
                 Recording #{counter} | {time}
-          </Text>
+        </Text>
     )
 }
 

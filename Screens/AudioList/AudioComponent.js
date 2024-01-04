@@ -1,40 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text} from 'react-native';
-import { firestore } from '../../Firebase/firebaseConfig';
+import { db } from "../../Firebase/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
+import React, {useState, useEffect} from "react";
+import { View, Text } from "react-native";
 
 const AudioComponent = () => {
+  const audio_files = collection(db, "audio_files");
 
-    const [audiofiles, setAudiofiles] = useState();
+  const [files, setFiles] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          const audioCollection = collection(firestore, 'audio_files');
-          
-          try {
-            const querySnapshot = await getDocs(audioCollection);
-            const audioData = querySnapshot.docs.map(doc => doc.data());
-            setAudiofiles(audioData);
-          } catch (error) {
-            console.error('Error fetching audio data: ', error);
-          }
-        };
-    
-        fetchData();
-      }, []);
+  const getFiles = async () => {
+    try {
+      const querySnapshot = await getDocs(audio_files);
+      const data = querySnapshot.docs.map(doc => doc.data());
 
-    return (
-        <View>
-  <Text>AudioComponent</Text>
-  {audiofiles.map((audio, index) => (
-    <View key={index}>
-      {audio.recordings.map((recording, recordingIndex) => (
-        <Text key={recordingIndex}>{recording}</Text>
-      ))}
+      // Ensure 'data' is always an array
+      const newData = data.length > 0 ? data : [];
+
+      setFiles(newData);
+    } catch (error) {
+      console.error("Error getting documents:", error);
+      setFiles("Error fetching data");
+    }
+  };
+
+  useEffect(() => {
+    getFiles();
+  }, []);
+
+  return (
+    <View>
+      {Array.isArray(files) ? (
+        // Render 'recordings' array for each document
+        files.map((doc, index) => (
+          <View key={index}>
+            <Text>Date Time: {doc.date_time.toDate().toLocaleString()}</Text>
+            <Text>Recordings:</Text>
+          </View>
+        ))
+      ) : (
+        <Text>{files}</Text>
+      )}
     </View>
-  ))}
-</View>
-
-    )
-}
+  );
+};
 
 export default AudioComponent;

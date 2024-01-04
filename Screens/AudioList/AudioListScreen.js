@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
+import AudioComponent from './AudioComponent';
 
 const AudioListScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Sessions List!</Text>
-            
+            <AudioComponent/>
         </View>
     );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import { Audio } from 'expo-av';
 import ErrorAlert from '../../components/ErrorAlert';
 import RecordedItem from '../../components/RecordedItem';
@@ -50,6 +50,7 @@ const  RecordButton = () => {
     const seconds = Math.round((minutes - Math.floor(minutes)) * 60);
     return seconds < 10 ? `${Math.floor(minutes)}:0${seconds}` : `${Math.floor(minutes)}:${seconds}`
   }
+  
 
   const  getRecordingLines = () => {
     return recordings.map((recordingLine, index) => {
@@ -68,23 +69,19 @@ const  RecordButton = () => {
 
       return (
         <View key={index} style={styles.row}> 
-          {/* <Text style={styles.fill}>
-                Recording #{counter} | {time}
-          </Text> */}
-          <AudioInfo counter={counter} time={time} />
+          <AudioInfo 
+            counter={counter} 
+            time={time} 
+          />
           <RecordedItem 
             onPlay={handlePlay} 
             onSave={handleSave} 
           />
-          {/* <Text style={styles.fill}>
-            Recording #{counter} | {recordingLine.duration}
-          </Text> 
-          <Button onPress={() => recordingLine.sound.replayAsync()} title="Play"/> 
-          <Button onPress={() =>  console.log(`recording ${counter} was clicked`) } title="Save" /> */}
         </View>
       );
     });
   }
+
 
   const  clearRecordings = () => {
     setRecordings([])
