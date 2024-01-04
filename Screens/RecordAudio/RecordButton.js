@@ -1,8 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { Audio } from 'expo-av';
+import ErrorAlert from '../../components/ErrorAlert';
+import RecordedItem from '../../components/RecordedItem';
+import AudioInfo from '../../components/AudioInfo';
 
-export default function RecordButton() {
+
+
+const  RecordButton = () => {
   const [recording, setRecording] = React.useState();
   const [recordings, setRecordings] = React.useState([]);
 
@@ -17,7 +22,9 @@ export default function RecordButton() {
         const { recording } = await Audio.Recording.createAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
         setRecording(recording);
       }
-    } catch (err) {}
+    } catch (err) {
+      <ErrorAlert error={err} />
+    }
   }
 
   async function stopRecording() {
@@ -33,28 +40,53 @@ export default function RecordButton() {
     });
 
     setRecordings(allRecordings);
+
+    return recording.getURI();
+
   }
 
-  function getDurationFormatted(milliseconds) {
+  const  getDurationFormatted = (milliseconds) => {
     const minutes = milliseconds / 1000 / 60;
     const seconds = Math.round((minutes - Math.floor(minutes)) * 60);
     return seconds < 10 ? `${Math.floor(minutes)}:0${seconds}` : `${Math.floor(minutes)}:${seconds}`
   }
 
-  function getRecordingLines() {
+  const  getRecordingLines = () => {
     return recordings.map((recordingLine, index) => {
+
+      const counter = index + 1;
+      const time = recordingLine.duration;
+
+      const handlePlay = () => {
+        recordingLine.sound.replayAsync();
+      }
+
+      const handleSave = () => {
+        console.log(`recording ${counter} was clicked`);
+      }
+      
+
       return (
-        <View key={index} style={styles.row}>
-          <Text style={styles.fill}>
-            Recording #{index + 1} | {recordingLine.duration}
-          </Text>
-          <Button onPress={() => recordingLine.sound.replayAsync()} title="Play"></Button>
+        <View key={index} style={styles.row}> 
+          {/* <Text style={styles.fill}>
+                Recording #{counter} | {time}
+          </Text> */}
+          <AudioInfo counter={counter} time={time} />
+          <RecordedItem 
+            onPlay={handlePlay} 
+            onSave={handleSave} 
+          />
+          {/* <Text style={styles.fill}>
+            Recording #{counter} | {recordingLine.duration}
+          </Text> 
+          <Button onPress={() => recordingLine.sound.replayAsync()} title="Play"/> 
+          <Button onPress={() =>  console.log(`recording ${counter} was clicked`) } title="Save" /> */}
         </View>
       );
     });
   }
 
-  function clearRecordings() {
+  const  clearRecordings = () => {
     setRecordings([])
   }
 
@@ -79,10 +111,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 10,
-    marginRight: 40
   },
-  fill: {
-    flex: 1,
-    margin: 15
-  }
 });
+
+export default RecordButton;

@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+
 const AudioListScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Sessions List!</Text>
+            
         </View>
     );
 };
@@ -12,8 +14,9 @@ const AudioListScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        backgroundColor: '#fff',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     text: {
         fontSize: 20,

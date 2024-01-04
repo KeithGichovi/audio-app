@@ -1,7 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons';
-import ProfileScreen from "../Screens/Profile/ProfileScreen";
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import AudioListScreen from "../Screens/AudioList/AudioListScreen";
 import RecordAudioScreen from "../Screens/RecordAudio/RecordAudioScreen";
 
@@ -39,12 +38,6 @@ const NavigationTabs = () => {
                     }}
                 />
             
-
-                <Tab.Screen name="Profile" component={ProfileScreen}
-                    options={{ 
-                        tabBarIcon: ({ color, size }) => <FontAwesome5 name="user-alt" size={size} color={color} /> 
-                    }}
-                />
 
         </Tab.Navigator>
 
