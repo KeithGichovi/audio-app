@@ -41,8 +41,9 @@ const  RecordButton = () => {
 
     setRecordings(allRecordings);
 
+    
+    //console.log(recording.getURI());
     return recording.getURI();
-
   }
 
   const  getDurationFormatted = (milliseconds) => {

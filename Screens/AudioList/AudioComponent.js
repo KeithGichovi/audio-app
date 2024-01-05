@@ -1,12 +1,18 @@
 import { db } from "../../Firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import React, {useState, useEffect} from "react";
-import { View, Text } from "react-native";
+import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
+import * as FileSystem from 'expo-file-system';
+import { Audio } from 'expo-av';
+import ErrorAlert from "../../components/ErrorAlert";
 
 const AudioComponent = () => {
+
   const audio_files = collection(db, "audio_files");
 
   const [files, setFiles] = useState([]);
+
+  const [sound, setSound] = useState();
 
   const getFiles = async () => {
     try {
@@ -14,11 +20,58 @@ const AudioComponent = () => {
       const data = querySnapshot.docs.map(doc => doc.data());
       const newData = data.length > 0 ? data : [];
 
-      console.log(newData);
       setFiles(newData);
     } catch (error) {
       console.error("Error getting documents:", error);
       setFiles("Error fetching data");
+    }
+  };
+
+
+  // const playAudio = async (audioURI) => {
+  //   try {
+      
+  //     const { sound } = await Audio.Sound.createAsync(
+  //       { uri: audioURI },
+  //       { shouldPlay: true }
+  //     );
+      
+  //     setSound(sound);
+
+  //   } catch (error) {
+
+  //     console.error(error);
+
+  //   }
+  // }
+
+  const playAudio = async (audioUri) => {
+    try {
+      const fileInfo = await FileSystem.getInfoAsync(audioUri);
+      if (fileInfo.exists) {
+
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: audioUri },
+          { shouldPlay: true }
+        );
+        console.log("playing audio");
+        setSound(sound);
+
+      } else {
+        
+        console.log("file does not exist");
+        
+      }
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  };
+  
+
+
+  const stopAudio = async () => {
+    if (sound) {
+      await sound.unloadAsync();
     }
   };
 
@@ -27,20 +80,57 @@ const AudioComponent = () => {
   }, []);
 
   return (
-    <View>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       {Array.isArray(files) ? (
-        // Render 'recordings' array for each document
         files.map((doc, index) => (
-          <View key={index}>
-            <Text>Date Time: {doc.date_time.toDate().toLocaleString()}</Text>
-            <Text>Recordings:{doc.recordings}</Text>
+          <View key={index} style={styles.audioView}>
+            <Text style={styles.infoText}>Recording name: {doc.name}</Text>
+            <Text style={styles.infoText}>Time Created: {doc.date_time.toDate().toLocaleString()}</Text>
+            
+            <View style={styles.buttonView}>
+              <Button
+                title="Play Audio"
+                onPress={() => playAudio(doc.recordings)}
+              />
+              <Button 
+                title="Stop Audio" 
+                onPress={() => stopAudio()} 
+              />
+            </View>
+            
           </View>
         ))
       ) : (
         <Text>{files}</Text>
       )}
-    </View>
+    </ScrollView>
   );
 };
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+  },
+  audioView: {
+    flexDirection: 'column',
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  buttonView:{
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    paddingTop: 20,
+  },
+  infoText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingVertical: 5,
+  },
+
+});
+
 
 export default AudioComponent;

@@ -14,13 +14,14 @@ const AudioListScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        paddingVertical: 20,
+        paddingHorizontal: 15,
+        marginTop: 50,
     },
     text: {
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
+        paddingVertical: 20,
     },
 });
 
