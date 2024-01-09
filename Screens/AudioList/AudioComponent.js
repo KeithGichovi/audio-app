@@ -4,7 +4,8 @@ import React, {useState, useEffect} from "react";
 import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
 import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
-import ErrorAlert from "../../components/ErrorAlert";
+
+
 
 const AudioComponent = () => {
 
@@ -27,46 +28,24 @@ const AudioComponent = () => {
     }
   };
 
-
-  // const playAudio = async (audioURI) => {
-  //   try {
-      
-  //     const { sound } = await Audio.Sound.createAsync(
-  //       { uri: audioURI },
-  //       { shouldPlay: true }
-  //     );
-      
-  //     setSound(sound);
-
-  //   } catch (error) {
-
-  //     console.error(error);
-
-  //   }
-  // }
-
   const playAudio = async (audioUri) => {
     try {
       const fileInfo = await FileSystem.getInfoAsync(audioUri);
+      
       if (fileInfo.exists) {
-
         const { sound } = await Audio.Sound.createAsync(
           { uri: audioUri },
           { shouldPlay: true }
         );
-        console.log("playing audio");
+        console.log("Playing audio");
         setSound(sound);
-
       } else {
-        
-        console.log("file does not exist");
-        
+        console.log("File does not exist");
       }
     } catch (error) {
       console.error("Error playing audio:", error);
     }
   };
-  
 
 
   const stopAudio = async () => {
@@ -85,7 +64,7 @@ const AudioComponent = () => {
         files.map((doc, index) => (
           <View key={index} style={styles.audioView}>
             <Text style={styles.infoText}>Recording name: {doc.name}</Text>
-            <Text style={styles.infoText}>Time Created: {doc.date_time.toDate().toLocaleString()}</Text>
+            <Text style={styles.infoText}>Created: {doc.date_time.toDate().toLocaleString()}</Text>
             
             <View style={styles.buttonView}>
               <Button
@@ -94,7 +73,7 @@ const AudioComponent = () => {
               />
               <Button 
                 title="Stop Audio" 
-                onPress={() => stopAudio()} 
+                onPress={stopAudio} 
               />
             </View>
             

@@ -4,14 +4,21 @@ import { Audio } from 'expo-av';
 import ErrorAlert from '../../components/ErrorAlert';
 import RecordedItem from '../../components/RecordedItem';
 import AudioInfo from '../../components/AudioInfo';
-
+import { storage } from '../../Firebase/firebaseConfig';
+import {ref , getDownloadURL, uploadBytes, uploadBytesResumable} from 'firebase/storage';
 
 
 const  RecordButton = () => {
+
   const [recording, setRecording] = React.useState();
   const [recordings, setRecordings] = React.useState([]);
 
-  async function startRecording() {
+  /**
+   * 
+   * @description Starts the recording and saves it to the state.
+   * @var perm - The permission to record.
+   */
+  const startRecording = async () => {
     try {
       const perm = await Audio.requestPermissionsAsync();
       if (perm.status === "granted") {
@@ -27,12 +34,20 @@ const  RecordButton = () => {
     }
   }
 
-  async function stopRecording() {
+  /**
+   * 
+   * @description Stops the recording and saves it to the state.
+   * @var allRecordings - The array of recordings.
+   * @var sound - The sound of the recording.
+   * @var status - The status of the recording.
+   */
+  const stopRecording = async () => {
     setRecording(undefined);
 
     await recording.stopAndUnloadAsync();
     let allRecordings = [...recordings];
     const { sound, status } = await recording.createNewLoadedSoundAsync();
+
     allRecordings.push({
       sound: sound,
       duration: getDurationFormatted(status.durationMillis),
@@ -40,12 +55,18 @@ const  RecordButton = () => {
     });
 
     setRecordings(allRecordings);
-
     
-    //console.log(recording.getURI());
-    return recording.getURI();
   }
 
+  /**
+   * 
+   * @param {*} milliseconds 
+   * @returns 
+   * @description Formats the duration of the recording.
+   * @var minutes - The duration in minutes.
+   * @var seconds - The duration in seconds.
+   * 
+   */
   const  getDurationFormatted = (milliseconds) => {
     const minutes = milliseconds / 1000 / 60;
     const seconds = Math.round((minutes - Math.floor(minutes)) * 60);
@@ -53,9 +74,18 @@ const  RecordButton = () => {
   }
   
 
+  /**
+   * 
+   * @returns 
+   * @description Returns an array of JSX elements containing the recording lines.
+   * @var counter - The number of the recording.
+   * @var time - The duration of the recording. 
+   * @func handlePlay - The function that plays the recording.
+   * @func handleSave - The function that saves the recording.
+   * 
+   */
   const  getRecordingLines = () => {
     return recordings.map((recordingLine, index) => {
-
       const counter = index + 1;
       const time = recordingLine.duration;
 
@@ -63,10 +93,52 @@ const  RecordButton = () => {
         recordingLine.sound.replayAsync();
       }
 
-      const handleSave = () => {
-        console.log(`recording ${counter} was clicked`);
-      }
+      /**
+       * 
+       * @description Uploads the recording to Firebase Storage.
+       * @param {*} index
+       * @param {*} fileName
+       * 
+       */
+      const handleUpload = async (index, fileName) => {
+        try {
+          const sound = new Audio.Sound();
+          const clickedRecording = await recordings[index].file;
+          const storageRef = ref(storage, `audio/${fileName}`);
+          const uploadTask = uploadBytesResumable(storageRef, clickedRecording);
+          const downloadURL = await getDownloadURL(uploadTask);
       
+          console.log("File uploaded successfully, download URL:", downloadURL);
+        } catch (error) {
+          console.error("Error uploading file:", error.message);
+        }
+      };
+      
+      /**
+       * 
+       * @param {*} index
+       * @description Handles the save button press.
+       *  
+       */
+      const handleSave = (index) => {
+      
+        const fileName = `recording_${Date.now()}.caf`;
+        handleUpload(index, fileName);
+      };
+      
+
+      /**
+       * 
+       * @param {*} index 
+       * @description Handles the delete button press.
+       * @var allRecordings - The array of recordings.
+       * 
+       */
+      const handleDelete = (index) => {
+        let allRecordings = [...recordings];
+        allRecordings.splice(index,1);
+        setRecordings(allRecordings);
+      }
 
       return (
         <View key={index} style={styles.row}> 
@@ -76,14 +148,18 @@ const  RecordButton = () => {
           />
           <RecordedItem 
             onPlay={handlePlay} 
-            onSave={handleSave} 
+            onSave={() => handleDelete(index)} 
           />
         </View>
       );
     });
   }
 
-
+  /**
+   * 
+   * @description Clears the recordings from the state.
+   * @var setRecordings - The state of the recordings.
+   */
   const  clearRecordings = () => {
     setRecordings([])
   }

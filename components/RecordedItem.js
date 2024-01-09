@@ -6,7 +6,7 @@ const RecordedItem = ({ onPlay, onSave }) => {
     return (
         <View style={styles.row}>
             <Button onPress={onPlay} title="Play" style={styles.play}/>
-            <Button onPress={onSave} title="Save" style={styles.save}/>
+            <Button onPress={onSave} title="Delete" style={styles.save}/>
         </View>
     );
 };
