@@ -34,7 +34,7 @@ const AudioComponent = () => {
       
       if (fileInfo.exists) {
         const { sound } = await Audio.Sound.createAsync(
-          { uri: audioUri },
+          { uri: fileInfo.uri },
           { shouldPlay: true }
         );
         console.log("Playing audio");

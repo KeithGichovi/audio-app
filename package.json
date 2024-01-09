@@ -9,12 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@expo/vector-icons": "^13.0.0",
+    "@expo/vector-icons": "^14.0.0",
     "@react-native-firebase/app": "^18.7.3",
     "@react-native-firebase/firestore": "^18.7.3",
     "@react-native-firebase/storage": "^18.7.3",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
+    "@rneui/base": "github:react-native-elements/react-native-elements#base",
+    "@rneui/themed": "github:react-native-elements/react-native-elements#themed",
     "expo": "~49.0.15",
     "expo-av": "~13.4.1",
     "expo-file-system": "~15.4.5",
