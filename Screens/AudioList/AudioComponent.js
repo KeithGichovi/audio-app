@@ -1,7 +1,7 @@
 import { db } from "../../Firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import React, {useState, useEffect} from "react";
-import { View, Text, Button, StyleSheet, ScrollView, RefreshControl } from "react-native";
+import React, {useState, useEffect, useCallback} from "react";
+import { View, Text, Button, StyleSheet, ScrollView, RefreshControl,  } from "react-native";
 import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
 
@@ -56,12 +56,33 @@ const AudioComponent = () => {
     }
   };
 
+
+  /**
+   * 
+   * @description Refreshes the screen.
+   * @var refresh - The refresh state.
+   * @var onRefresh - The function that refreshes the screen.
+   * @function getFiles - The function that gets the files from Firebase.
+   * @function setRefresh - The function that sets the refresh state.
+   * @func setTimeout - Sets the refresh state to false after 1 second.
+   * @func setRefresh - Sets the refresh state to false.
+   * 
+   */
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+    getFiles();
+    setRefresh(false);
+    setTimeout(() => {
+      setRefresh(false);
+    }, 1000);
+  });
+
   useEffect(() => {
     getFiles();
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container} refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}>
       {Array.isArray(files) ? (
         files.map((doc, index) => (
           <View key={index} style={styles.audioView}>

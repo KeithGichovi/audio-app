@@ -120,7 +120,7 @@ const  RecordButton = () => {
           if(!isuploaded){
             Alert.alert(
               'Upload Successful',
-              'Your recording has been uploaded to Firebase Storage.',
+              'Your recording has been uploaded to the cloud.',
               [
                 {
                   text: 'OK',
@@ -132,7 +132,7 @@ const  RecordButton = () => {
           }else{
             Alert.alert(
               'Upload Failed',
-              'Your recording could not be uploaded to Firebase Storage.',
+              'Your recording could not be uploaded to the cloud.',
               [
                 {
                   text: 'OK',
