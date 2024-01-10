@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, View, Button, Share, Alert } from 'react-native';
 import { Audio } from 'expo-av';
 import ErrorAlert from '../../components/ErrorAlert';
@@ -11,9 +11,7 @@ const  RecordButton = () => {
 
   const [recording, setRecording] = useState();
   const [recordings, setRecordings] = useState([]);
-  const [isuploaded, setisUploaded] = useState(false);
-
-  
+  const [isuploaded, setisUploaded] = useState(false);  
 
   /**
    * 
@@ -216,6 +214,7 @@ const  RecordButton = () => {
       };
 
       return (
+        
         <View key={index} style={styles.row}> 
           <AudioInfo 
             counter={counter} 
@@ -227,7 +226,11 @@ const  RecordButton = () => {
             onDelete={() => handleDelete(index)} 
             onUpload={() => handleSave(index)}
           />
+
         </View>
+        
+        
+        
       );
     });
   }
@@ -263,6 +266,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 10,
   },
+  current: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    paddingVertical: 5,
+    color: '#E63946',
+  }
 });
 
 export default RecordButton;

@@ -1,7 +1,7 @@
 import { db } from "../../Firebase/firebaseConfig";
 import { collection, getDocs, deleteDoc } from "firebase/firestore";
 import React, {useState, useEffect, useCallback} from "react";
-import { View, Text, Button, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, Share } from "react-native";
+import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, Share } from "react-native";
 import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
@@ -14,7 +14,6 @@ const AudioComponent = () => {
   const [files, setFiles] = useState([]);
   const [sound, setSound] = useState();
   const [refresh, setRefresh] = useState(false);  
-  const [isPlaying, setIsPlaying] = useState(false);
 
 
   const getFiles = async () => {
@@ -41,7 +40,6 @@ const AudioComponent = () => {
         );
         console.log("Playing audio");
         setSound(sound);
-        setIsPlaying(true);
       } else {
         console.log("File does not exist");
       }
@@ -55,7 +53,6 @@ const AudioComponent = () => {
     if (sound) {
       await sound.unloadAsync();
     }
-    setIsPlaying(false);
   };
 
 
@@ -124,19 +121,17 @@ const AudioComponent = () => {
           <View key={index} style={styles.audioView}>
             <Text style={styles.infoText}>Recording name: {doc.name}</Text>
             <Text style={styles.infoText}>Created: {doc.date_time.toDate().toLocaleString()}</Text>
-            
-            { isPlaying ? <Text style={styles.current}> Currently Playing</Text> : null }
 
             <View style={styles.buttonView}>  
               <TouchableOpacity onPress={() => playAudio(doc.recordings)} >
                   <Entypo name="controller-play" size={25} color="black" />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => handleDelete}>
+              <TouchableOpacity onPress={() => handleDelete(doc.recordings)}>
                   <AntDesign name="delete" size={25} color="black" />
               </TouchableOpacity>
               
-              <TouchableOpacity onPress={() => handleShare}>
+              <TouchableOpacity onPress={() => handleShare(doc.recordings)}>
                   <AntDesign name="sharealt" size={25} color="black" />
               </TouchableOpacity>
 
@@ -175,12 +170,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingVertical: 5,
   },
-  current: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    paddingVertical: 5,
-    color: '#E63946',
-  }
+
 });
 
 
