@@ -4,8 +4,8 @@ import { Audio } from 'expo-av';
 import ErrorAlert from '../../components/ErrorAlert';
 import RecordedItem from '../../components/RecordedItem';
 import AudioInfo from '../../components/AudioInfo';
-import { storage } from '../../Firebase/firebaseConfig';
-import {ref , getDownloadURL, uploadBytes, uploadBytesResumable} from 'firebase/storage';
+import { db } from '../../Firebase/firebaseConfig';
+import { addDoc , collection, Timestamp} from 'firebase/firestore';
 
 
 const  RecordButton = () => {
@@ -96,21 +96,29 @@ const  RecordButton = () => {
        * @description Uploads the recording to Firebase Storage.
        * @param {*} index
        * @param {*} fileName
+       * @var clickedRecording - The recording that was clicked.
+       * @var data - The data that is to be uploaded.
+       * 
        * 
        */
       const handleUpload = async (index, fileName) => {
         try {
-          const sound = new Audio.Sound();
-          const clickedRecording = await recordings[index].file;
-          const storageRef = ref(storage, `audio/${fileName}`);
-          const uploadTask = uploadBytesResumable(storageRef, clickedRecording);
-          const downloadURL = await getDownloadURL(uploadTask);
+          const clickedRecording = recordings[index].file;
+          const timestamp = Timestamp.fromDate(new Date());
+          const data = {
+            name: fileName,
+            date_time: timestamp,
+            recordings: clickedRecording,
+          }
+          console.log(data);
+          const docRef = await addDoc(collection(db, 'audio_files'), data);
       
-          console.log("File uploaded successfully, download URL:", downloadURL);
+          console.log("File URI uploaded to Firestore with document ID:", docRef.id);
         } catch (error) {
-          console.error("Error uploading file:", error.message);
+          console.error("Error uploading file URI to Firestore:", error.message);
         }
       };
+      
       /**
        * 
        * @param {*} index 
@@ -137,7 +145,7 @@ const  RecordButton = () => {
        * 
        * @param {*} index
        * @description Handles the save button press.
-       *  
+       * @var fileName - The name of the file.
        */
       const handleSave = (index) => {
       
@@ -153,6 +161,7 @@ const  RecordButton = () => {
        * @func setRecordings - The function that sets the state of the recordings.
        * @func splice - The function that removes the recording from the array.
        * @func onPress - The function that deletes the recording.
+       * 
        */
       const handleDelete = (index) => {
         Alert.alert(

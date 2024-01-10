@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDbIBHbd4MTDC4CLBv0voe0AdllzmLA4V0",
@@ -19,7 +19,5 @@ const firebase_app = initializeApp(firebaseConfig);
 
 const db = getFirestore(firebase_app);
 
-const storage = getStorage(firebase_app);
 
-
-export { db , storage };
+export { db  };
