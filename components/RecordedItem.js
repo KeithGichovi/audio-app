@@ -10,19 +10,21 @@ const RecordedItem = ({ onPlay, onShare, onDelete, onUpload }) => {
         <View style={styles.row}>
             
             <TouchableOpacity onPress={onPlay} style={styles.save}>
-                <Entypo name="controller-play" size={24} color="black" />
+                <Entypo name="controller-play" size={25} color="black" />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={onDelete} style={styles.save}>
-                <AntDesign name="delete" size={24} color="black" />
+                <AntDesign name="delete" size={25} color="black" />
             </TouchableOpacity>
             
             <TouchableOpacity onPress={onShare} style={styles.save}>
-                <AntDesign name="sharealt" size={24} color="black" />
+                <AntDesign name="sharealt" size={25} color="black" />
             </TouchableOpacity>
+
             <TouchableOpacity onPress={onUpload} style={styles.save}>
-                <MaterialIcons name="save-alt" size={24} color="black" />
+                <MaterialIcons name="save-alt" size={25} color="black" />
             </TouchableOpacity>
+
         </View>
     );
 };

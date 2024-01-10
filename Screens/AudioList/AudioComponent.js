@@ -1,10 +1,11 @@
 import { db } from "../../Firebase/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc } from "firebase/firestore";
 import React, {useState, useEffect, useCallback} from "react";
-import { View, Text, Button, StyleSheet, ScrollView, RefreshControl,  } from "react-native";
+import { View, Text, Button, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, Share } from "react-native";
 import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
-
+import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 
 const AudioComponent = () => {
@@ -16,6 +17,8 @@ const AudioComponent = () => {
   const [sound, setSound] = useState();
 
   const [refresh, setRefresh] = useState(false);  
+
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const getFiles = async () => {
     try {
@@ -41,6 +44,7 @@ const AudioComponent = () => {
         );
         console.log("Playing audio");
         setSound(sound);
+        setIsPlaying(true);
       } else {
         console.log("File does not exist");
       }
@@ -54,8 +58,41 @@ const AudioComponent = () => {
     if (sound) {
       await sound.unloadAsync();
     }
+    setIsPlaying(false);
   };
 
+
+  const handleDelete = async (audioUri) => {
+    try {
+      // Find the document with the matching 'recordings' field
+      const querySnapshot = await getDocs(audio_files);
+      const docToDelete = querySnapshot.docs.find(doc => doc.data().recordings === audioUri);
+  
+      if (docToDelete) {
+        await deleteDoc(audio_files, docToDelete.id);
+        console.log("Audio file deleted");
+      } else {
+        console.log("Audio file not found for deletion");
+      }
+    } catch (error) {
+      console.error("Error deleting audio file:", error);
+    }
+  }
+
+
+  const handleShare = async (audioUri) => {
+    try {
+      await Share.share({
+        title: 'Audio Recorder',
+        message: 'This audio has been shared with you, from the app "Audio Recorder".',
+        url: audioUri,
+        type: 'audio/caf'
+      });
+    } catch (error) {
+      console.error("Error sharing file:", error.message);
+    }
+  }
+  
 
   /**
    * 
@@ -77,6 +114,8 @@ const AudioComponent = () => {
     }, 1000);
   });
 
+  
+
   useEffect(() => {
     getFiles();
   }, []);
@@ -89,17 +128,25 @@ const AudioComponent = () => {
             <Text style={styles.infoText}>Recording name: {doc.name}</Text>
             <Text style={styles.infoText}>Created: {doc.date_time.toDate().toLocaleString()}</Text>
             
-            <View style={styles.buttonView}>
-              <Button
-                title="Play Audio"
-                onPress={() => playAudio(doc.recordings)}
-              />
-              <Button 
-                title="Stop Audio" 
-                onPress={stopAudio} 
-              />
-            </View>
+            { isPlaying ? <Text style={styles.infoText}> Currently Playing</Text> : null }
             
+            <View style={styles.buttonView}>  
+              <TouchableOpacity onPress={() => playAudio(doc.recordings)} >
+                  <Entypo name="controller-play" size={25} color="black" />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => handleDelete}>
+                  <AntDesign name="delete" size={25} color="black" />
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={() => handleShare}>
+                  <AntDesign name="sharealt" size={25} color="black" />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={stopAudio}>
+                <Entypo name="controller-stop" size={25} color="black" />
+              </TouchableOpacity>
+            </View>
           </View>
         ))
       ) : (

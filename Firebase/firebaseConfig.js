@@ -4,15 +4,13 @@ import { getFirestore } from "firebase/firestore";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDbIBHbd4MTDC4CLBv0voe0AdllzmLA4V0",
-  authDomain: "audiowave-84911.firebaseapp.com",
-  databaseURL: "https://audiowave-84911-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "audiowave-84911",
-  storageBucket: "audiowave-84911.appspot.com",
-  messagingSenderId: "171238336630",
-  appId: "1:171238336630:web:44c84e1e3c819d4fa51757",
-  measurementId: "G-7DRB58EKEM",
-  storageBucket: "audiowave-84911.appspot.com"
+  apiKey: "AIzaSyAXVhrpqp9kIJrSEM3-pdJMY3NNO68M3P4",
+  authDomain: "audioappfree.firebaseapp.com",
+  projectId: "audioappfree",
+  storageBucket: "audioappfree.appspot.com",
+  messagingSenderId: "156406397272",
+  appId: "1:156406397272:web:dc28b647a8b51753f5cd2d",
+  measurementId: "G-ZHFMYK50DY"
 };
 
 const firebase_app = initializeApp(firebaseConfig);
@@ -21,3 +19,4 @@ const db = getFirestore(firebase_app);
 
 
 export { db  };
+
