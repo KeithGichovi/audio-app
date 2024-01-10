@@ -5,7 +5,7 @@ import AudioComponent from './AudioComponent';
 const AudioListScreen = () => {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Sessions List!</Text>
+            <Text style={styles.text}>Your saved Sessions.</Text>
             <AudioComponent/>
         </View>
     );

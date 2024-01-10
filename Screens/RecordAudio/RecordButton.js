@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Button, Share, Alert } from 'react-native';
 import { Audio } from 'expo-av';
 import ErrorAlert from '../../components/ErrorAlert';
@@ -7,11 +7,13 @@ import AudioInfo from '../../components/AudioInfo';
 import { db } from '../../Firebase/firebaseConfig';
 import { addDoc , collection, Timestamp} from 'firebase/firestore';
 
-
 const  RecordButton = () => {
 
-  const [recording, setRecording] = React.useState();
-  const [recordings, setRecordings] = React.useState([]);
+  const [recording, setRecording] = useState();
+  const [recordings, setRecordings] = useState([]);
+  const [isuploaded, setisUploaded] = useState(false);
+
+  
 
   /**
    * 
@@ -112,13 +114,40 @@ const  RecordButton = () => {
           }
           console.log(data);
           const docRef = await addDoc(collection(db, 'audio_files'), data);
-      
           console.log("File URI uploaded to Firestore with document ID:", docRef.id);
+          setisUploaded(true);
+
+          if(!isuploaded){
+            Alert.alert(
+              'Upload Successful',
+              'Your recording has been uploaded to Firebase Storage.',
+              [
+                {
+                  text: 'OK',
+                  style: 'cancel',
+                },
+              ],
+              { cancelable: true }
+            );
+          }else{
+            Alert.alert(
+              'Upload Failed',
+              'Your recording could not be uploaded to Firebase Storage.',
+              [
+                {
+                  text: 'OK',
+                  style: 'cancel',
+                },
+              ],
+              { cancelable: true }
+            );
+          }
+
         } catch (error) {
           console.error("Error uploading file URI to Firestore:", error.message);
+          
         }
       };
-      
       /**
        * 
        * @param {*} index 

@@ -1,7 +1,7 @@
 import { db } from "../../Firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import React, {useState, useEffect} from "react";
-import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Button, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
 
@@ -14,6 +14,8 @@ const AudioComponent = () => {
   const [files, setFiles] = useState([]);
 
   const [sound, setSound] = useState();
+
+  const [refresh, setRefresh] = useState(false);  
 
   const getFiles = async () => {
     try {
