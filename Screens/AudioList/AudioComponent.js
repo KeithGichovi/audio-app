@@ -56,24 +56,6 @@ const AudioComponent = () => {
   };
 
 
-  const handleDelete = async (audioUri) => {
-    try {
-      // Find the document with the matching 'recordings' field
-      const querySnapshot = await getDocs(audio_files);
-      const docToDelete = querySnapshot.docs.find(doc => doc.data().recordings === audioUri);
-  
-      if (docToDelete) {
-        await deleteDoc(audio_files, docToDelete.id);
-        console.log("Audio file deleted");
-      } else {
-        console.log("Audio file not found for deletion");
-      }
-    } catch (error) {
-      console.error("Error deleting audio file:", error);
-    }
-  }
-
-
   const handleShare = async (audioUri) => {
     try {
       await Share.share({
@@ -125,10 +107,6 @@ const AudioComponent = () => {
             <View style={styles.buttonView}>  
               <TouchableOpacity onPress={() => playAudio(doc.recordings)} >
                   <Entypo name="controller-play" size={25} color="black" />
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => handleDelete(doc.recordings)}>
-                  <AntDesign name="delete" size={25} color="black" />
               </TouchableOpacity>
               
               <TouchableOpacity onPress={() => handleShare(doc.recordings)}>
