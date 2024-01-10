@@ -11,14 +11,11 @@ import { Entypo } from '@expo/vector-icons';
 const AudioComponent = () => {
 
   const audio_files = collection(db, "audio_files");
-
   const [files, setFiles] = useState([]);
-
   const [sound, setSound] = useState();
-
   const [refresh, setRefresh] = useState(false);  
-
   const [isPlaying, setIsPlaying] = useState(false);
+
 
   const getFiles = async () => {
     try {
@@ -114,7 +111,7 @@ const AudioComponent = () => {
     }, 1000);
   });
 
-  
+
 
   useEffect(() => {
     getFiles();
@@ -128,8 +125,8 @@ const AudioComponent = () => {
             <Text style={styles.infoText}>Recording name: {doc.name}</Text>
             <Text style={styles.infoText}>Created: {doc.date_time.toDate().toLocaleString()}</Text>
             
-            { isPlaying ? <Text style={styles.infoText}> Currently Playing</Text> : null }
-            
+            { isPlaying ? <Text style={styles.current}> Currently Playing</Text> : null }
+
             <View style={styles.buttonView}>  
               <TouchableOpacity onPress={() => playAudio(doc.recordings)} >
                   <Entypo name="controller-play" size={25} color="black" />
@@ -178,7 +175,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingVertical: 5,
   },
-
+  current: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingVertical: 5,
+    color: '#E63946',
+  }
 });
 
 
