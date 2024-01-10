@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-
+/***
+ * @exports AudioInfo
+ * @description The audio info.
+ * @function View - The function that creates a view.
+ * @function Text - The function that creates a text.
+ * @function TextInput - The function that creates a text input.
+ * @function StyleSheet - The function that creates a stylesheet.
+ * @returns The audio info view.
+ * 
+ */
 const AudioInfo = ({ counter, time }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState('');

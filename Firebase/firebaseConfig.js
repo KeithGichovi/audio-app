@@ -2,7 +2,14 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-
+/**
+ * 
+ * @description The firebase configuration.
+ * @var firebaseConfig - The firebase configuration.
+ * @function initializeApp - The function that initializes the app.
+ * @function getFirestore - The function that gets the firestore.
+ * @exports db - The database.
+ */
 const firebaseConfig = {
   apiKey: "AIzaSyAXVhrpqp9kIJrSEM3-pdJMY3NNO68M3P4",
   authDomain: "audioappfree.firebaseapp.com",

@@ -4,10 +4,18 @@ import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import AudioListScreen from "../Screens/AudioList/AudioListScreen";
 import RecordAudioScreen from "../Screens/RecordAudio/RecordAudioScreen";
 
-
+/**
+ * @function createBottomTabNavigator - The function that creates the bottom tab navigator.
+ * 
+ * 
+ */
 const  Tab = createBottomTabNavigator();
 
-
+/**
+ * 
+ * @returns The navigation tabs.
+ * 
+ */
 const NavigationTabs = () => {
     return (
 

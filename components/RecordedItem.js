@@ -4,6 +4,17 @@ import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
+/***
+ * @exports RecordedItem
+ * @description The recorded item.
+ * @function View - The function that creates a view.
+ * @function StyleSheet - The function that creates a stylesheet.
+ * @function TouchableOpacity - The function that creates a touchable opacity.
+ * @function AntDesign - The function that creates an ant design.
+ * @function Entypo - The function that creates an entypo.
+ * @function MaterialIcons - The function that creates a material icon.
+ * 
+ */
 const RecordedItem = ({ onPlay, onShare, onDelete, onUpload }) => {
     
     return (

@@ -6,7 +6,26 @@ import RecordedItem from '../../components/RecordedItem';
 import AudioInfo from '../../components/AudioInfo';
 import { db } from '../../Firebase/firebaseConfig';
 import { addDoc , collection, Timestamp} from 'firebase/firestore';
-
+/**
+ * @description The record button.
+  * @function useState - The function that declares a state variable.
+  * @function Audio - The function that creates an audio.
+  * @function StyleSheet - The function that creates a stylesheet.
+  *  @function View - The function that creates a view.
+  * @function Button - The function that creates a button.
+  * @function Share - The function that creates a share.
+  * @function Alert - The function that creates an alert.
+  * @function Timestamp - The function that creates a timestamp.
+  * @function addDoc - The function that adds a document to the collection.
+  * @function collection - The function that creates a collection.
+  * @function db - The function that creates a connection to the database.
+  * @function AudioInfo - The function that creates the audio info.
+  * @function RecordedItem - The function that creates the recorded item.
+  * @function ErrorAlert - The function that creates the error alert.
+  * @function useState - The function that declares a state variable.
+  * @function getDocs - The function that gets the documents from the collection.
+  * 
+ */
 const  RecordButton = () => {
 
   const [recording, setRecording] = useState();
@@ -88,6 +107,13 @@ const  RecordButton = () => {
       const counter = index + 1;
       const time = recordingLine.duration;
 
+      /**
+       * 
+       * @description Plays the recording.
+       * @var recordingLine - The recording line.
+       * @func replayAsync - The function that replays the recording.
+       * 
+       */
       const handlePlay = () => {
         recordingLine.sound.replayAsync();
       }
@@ -234,7 +260,6 @@ const  RecordButton = () => {
       );
     });
   }
-
   /**
    * 
    * @description Clears the recordings from the state.
@@ -243,7 +268,6 @@ const  RecordButton = () => {
   const  clearRecordings = () => {
     setRecordings([])
   }
-
   return (
     <View style={styles.container}>
       <Button title={recording ? 'Stop Recording' : 'Start Recording\n\n\n'} onPress={recording ? stopRecording : startRecording} />
@@ -252,7 +276,6 @@ const  RecordButton = () => {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
