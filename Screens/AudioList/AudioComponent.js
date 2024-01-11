@@ -6,6 +6,8 @@ import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import NoFiles from "../../components/NoFiles";
+
 
 /***
  * 
@@ -37,7 +39,6 @@ const AudioComponent = () => {
   const [files, setFiles] = useState([]);
   const [sound, setSound] = useState();
   const [refresh, setRefresh] = useState(false);  
-
   /**
    * 
    * @description Gets the audio files from Firebase.
@@ -159,10 +160,11 @@ const AudioComponent = () => {
             <Text style={styles.infoText}>Created: {doc.date_time.toDate().toLocaleString()}</Text>
 
             <View style={styles.buttonView}>  
+            
               <TouchableOpacity onPress={() => playAudio(doc.recordings)} >
-                  <Entypo name="controller-play" size={25} color="black" />
+                <Entypo name="controller-play" size={25} color="black" />
               </TouchableOpacity>
-              
+
               <TouchableOpacity onPress={() => handleShare(doc.recordings)}>
                   <AntDesign name="sharealt" size={25} color="black" />
               </TouchableOpacity>
@@ -170,11 +172,12 @@ const AudioComponent = () => {
               <TouchableOpacity onPress={stopAudio}>
                 <Entypo name="controller-stop" size={25} color="black" />
               </TouchableOpacity>
+
             </View>
           </View>
         ))
       ) : (
-        <Text>{files}</Text>
+        <NoFiles />
       )}
     </ScrollView>
   );
